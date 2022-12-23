@@ -11,7 +11,7 @@ const {
   roomDeleteSchemeMiddleware,
   schedulePostSchemeMiddleware,
   schedulePatchSchemeMiddleware,
-} = require("../SchemeMiddleware");
+} = require("../SchemeMiddleware/SchemeMiddleware");
 const {
   nameRegisterMiddleware,
   emailRegisterMiddleware,
@@ -19,7 +19,7 @@ const {
   accountTokenMiddleware,
   accountVerificationMiddleware,
   roomPostMiddleware,
-} = require("../Middleware");
+} = require("../Middleware/Middleware");
 
 router.post(
   "/user/register",
