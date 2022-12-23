@@ -25,6 +25,17 @@ const userGetSchemeMiddleware = (req, res, next) => {
   next();
 };
 
+const userPatchSchemeMiddleware = (req, res, next) => {
+  const user_Scheme = Joi.object({
+    _id: Joi.string().required(),
+    image: Joi.string().required(),
+  });
+  const { error } = user_Scheme.validate(req.body);
+  if (error)
+    return res.status(400).send({ error: error["details"][0]["message"] });
+  next();
+};
+
 const roomPostSchemeMiddleware = (req, res, next) => {
   const { _id } = req.user;
   const room_Scheme = Joi.object({
@@ -61,24 +72,24 @@ const roomDeleteSchemeMiddleware = (req, res, next) => {
 };
 
 const schedulePostSchemeMiddleware = (req, res, next) => {
-  const room_Scheme = Joi.object({
+  const schedule_Scheme = Joi.object({
     _id: Joi.string().required(),
     title: Joi.string().required(),
     description: Joi.string().required(),
     scheduledAt: Joi.date().required(),
   });
-  const { error } = room_Scheme.validate(req.body);
+  const { error } = schedule_Scheme.validate(req.body);
   if (error)
     return res.status(400).send({ error: error["details"][0]["message"] });
   next();
 };
 
 const schedulePatchSchemeMiddleware = (req, res, next) => {
-  const room_Scheme = Joi.object({
+  const schedule_Scheme = Joi.object({
     _id: Joi.string().required(),
     schedule_id: Joi.string().required(),
   });
-  const { error } = room_Scheme.validate(req.body);
+  const { error } = schedule_Scheme.validate(req.body);
   if (error)
     return res.status(400).send({ error: error["details"][0]["message"] });
   next();
@@ -92,4 +103,5 @@ module.exports = {
   roomPatchSchemeMiddleware,
   schedulePatchSchemeMiddleware,
   roomDeleteSchemeMiddleware,
+  userPatchSchemeMiddleware,
 };

@@ -12,6 +12,7 @@ const {
   roomDeleteSchemeMiddleware,
   schedulePostSchemeMiddleware,
   schedulePatchSchemeMiddleware,
+  userPatchSchemeMiddleware,
 } = require("../SchemeMiddleware/SchemeMiddleware");
 const {
   nameRegisterMiddleware,
@@ -67,6 +68,33 @@ router.post(
 router.post("/user/verify", accountVerificationMiddleware, async (req, res) => {
   res.status(200).send({ status: true, message: "authorized" });
 });
+
+router.patch(
+  "/user/photo",
+  accountVerificationMiddleware,
+  userPatchSchemeMiddleware,
+  async (req, res) => {
+    userModel.findByIdAndUpdate(
+      {
+        _id: req.body._id,
+      },
+      { $set: { image: req.body.image } },
+      {
+        returnDocument: "after",
+      },
+      (err, data) => {
+        console.log(data);
+        if (err)
+          return res
+            .status(400)
+            .send({ status: false, message: "failed to update image" });
+        return res
+          .status(200)
+          .send({ status: true, message: "photo successfully updated" });
+      }
+    );
+  }
+);
 
 router
   .route("/schedule")
