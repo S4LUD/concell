@@ -1,5 +1,6 @@
 const router = require("express").Router();
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 const userModel = require("../Model/userModel");
 const roomModel = require("../Model/roomModel");
 const scheduleModel = require("../Model/scheduleModel");
@@ -51,7 +52,15 @@ router.post(
   userGetSchemeMiddleware,
   accountTokenMiddleware,
   async (req, res) => {
-    res.header("token", req.res.locals.token).send({ message: "authorized" });
+    const { _id, school_identification_number, email, name, position } =
+      req.res.locals.data;
+    res.header("token", req.res.locals.token).send({
+      _id: _id,
+      school_identification_number: school_identification_number,
+      email: email,
+      name: name,
+      position: position,
+    });
   }
 );
 

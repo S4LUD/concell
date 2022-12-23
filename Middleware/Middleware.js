@@ -73,6 +73,7 @@ const accountTokenMiddleware = async (req, res, next) => {
       );
 
       res.locals.token = token;
+      res.locals.data = data;
       next();
     }
   );
@@ -80,7 +81,6 @@ const accountTokenMiddleware = async (req, res, next) => {
 
 const accountVerificationMiddleware = async (req, res, next) => {
   let JWToken = req.headers.token;
-
   if (!JWToken) return res.status(401).send({ message: "unauthorized" });
   try {
     const verified = jwt.verify(JWToken, process.env.TOKEN_SECRET);
