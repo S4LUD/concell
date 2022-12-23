@@ -23,6 +23,12 @@ const {
   roomPostMiddleware,
 } = require("../Middleware/Middleware");
 
+router.post("/user", accountVerificationMiddleware, (req, res) => {
+  userModel.findById(req.body._id, (err, data) => {
+    res.status(200).send(data);
+  });
+});
+
 router.post(
   "/user/register",
   userPostSchemeMiddleware,
@@ -83,7 +89,6 @@ router.patch(
         returnDocument: "after",
       },
       (err, data) => {
-        console.log(data);
         if (err)
           return res
             .status(400)
