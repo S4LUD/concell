@@ -1,7 +1,9 @@
+"use strict";
+
 const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
-const routes = require(".Routes");
+const routes = require("./Routes/Routes");
 const dotenv = require("dotenv");
 const cors = require("cors");
 
