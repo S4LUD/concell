@@ -29,7 +29,16 @@ router.post("/user", accountVerificationMiddleware, (req, res) => {
       return res
         .status(400)
         .send({ status: false, message: "failed to retrieve data" });
-    res.status(200).send(data);
+    const { _id, school_identification_number, email, name, position, image } =
+      data;
+    res.status(200).send({
+      _id: _id,
+      school_identification_number: school_identification_number,
+      email: email,
+      name: name,
+      position: position,
+      image: image,
+    });
   });
 });
 
