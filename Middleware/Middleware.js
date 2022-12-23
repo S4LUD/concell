@@ -81,13 +81,14 @@ const accountTokenMiddleware = async (req, res, next) => {
 
 const accountVerificationMiddleware = async (req, res, next) => {
   let JWToken = req.headers.token;
-  if (!JWToken) return res.status(401).send({ message: "unauthorized" });
+  if (!JWToken)
+    return res.status(401).send({ code: 0, message: "unauthorized" });
   try {
     const verified = jwt.verify(JWToken, process.env.TOKEN_SECRET);
     req.user = verified;
     next();
   } catch (error) {
-    res.status(400).send({ message: "invalid token" });
+    res.status(400).send({ code: 0, message: "invalid token" });
   }
 };
 
