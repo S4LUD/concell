@@ -65,7 +65,7 @@ router.post(
 );
 
 router.post("/user/verify", accountVerificationMiddleware, async (req, res) => {
-  res.status(200).send({ message: true });
+  res.status(200).send({ code: 0, message: "authorized" });
 });
 
 router
