@@ -64,6 +64,10 @@ router.post(
   }
 );
 
+router.post("/user/verify", accountVerificationMiddleware, async (req, res) => {
+  res.status(200).send({ message: true });
+});
+
 router
   .route("/schedule")
   .post(

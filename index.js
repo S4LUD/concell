@@ -25,4 +25,4 @@ app.use(express.json());
 
 app.use("/api/concell", routes);
 
-app.listen(process.env.PORT || 5719);
+app.listen(process.env.PORT);
