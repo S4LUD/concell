@@ -56,13 +56,16 @@ const accountTokenMiddleware = async (req, res, next) => {
     async (err, data) => {
       if (err) return res.status(400).send(err);
       if (!data)
-        return res
-          .status(404)
-          .send({ message: "school identification number not found" });
+        return res.status(404).send({
+          status: false,
+          message: "invalid credentials",
+        });
 
       const validate = bcrypt.compareSync(req.body.password, data.password);
       if (!validate)
-        return res.status(400).send({ message: "invalid credentials." });
+        return res
+          .status(400)
+          .send({ status: false, message: "invalid credentials." });
 
       const token = jwt.sign(
         { _id: data._id, position: data.position },
