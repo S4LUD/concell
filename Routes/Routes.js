@@ -25,6 +25,10 @@ const {
 
 router.post("/user", accountVerificationMiddleware, (req, res) => {
   userModel.findById(req.body._id, (err, data) => {
+    if (err)
+      return res
+        .status(400)
+        .send({ status: false, message: "failed to retrieve data" });
     res.status(200).send(data);
   });
 });
