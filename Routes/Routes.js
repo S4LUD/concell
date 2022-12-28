@@ -72,7 +72,7 @@ router.post(
   userGetSchemeMiddleware,
   accountTokenMiddleware,
   async (req, res) => {
-    const { _id, school_identification_number, email, name, position } =
+    const { _id, school_identification_number, email, name, position, image } =
       req.res.locals.data;
     res.header("token", req.res.locals.token).send({
       _id: _id,
@@ -80,6 +80,7 @@ router.post(
       email: email,
       name: name,
       position: position,
+      image: image,
     });
   }
 );
