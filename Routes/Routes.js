@@ -222,7 +222,7 @@ router.patch(
       },
       {
         $set: {
-          password: req.body.password,
+          password: req.body.new_password,
         },
       },
       {
