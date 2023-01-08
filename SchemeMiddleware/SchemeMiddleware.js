@@ -32,6 +32,7 @@ const userPatchSchemeMiddleware = (req, res, next) => {
     email: Joi.string().email(),
     name: Joi.string(),
     password: Joi.string(),
+    new_password: Joi.string(),
   });
   const { error } = user_Scheme.validate(req.body);
   if (error)
