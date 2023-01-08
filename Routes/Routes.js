@@ -46,7 +46,6 @@ router.post(
   "/user/register",
   userPostSchemeMiddleware,
   nameRegisterMiddleware,
-  emailRegisterMiddleware,
   sinRegisterMiddleware,
   (req, res) => {
     const salt = bcrypt.genSaltSync(10);
