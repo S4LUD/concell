@@ -230,6 +230,15 @@ router
       return res.status(200).send({ message: true });
     });
   })
+  .get(accountVerificationMiddleware, (req, res) => {
+    roomModel.find((err, data) => {
+      if (err)
+        return res
+          .status(400)
+          .send({ status: false, message: "failed to retrieve data" });
+      res.status(200).send(data);
+    });
+  })
   .delete(
     accountVerificationMiddleware,
     roomDeleteSchemeMiddleware,
