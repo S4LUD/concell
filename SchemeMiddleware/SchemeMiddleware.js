@@ -3,7 +3,6 @@ const Joi = require("joi");
 const userPostSchemeMiddleware = (req, res, next) => {
   const user_Scheme = Joi.object({
     school_identification_number: Joi.number().required(),
-    email: Joi.string().email().required(),
     name: Joi.string().required(),
     password: Joi.string().min(6).max(16).required(),
     position: Joi.string().required(),

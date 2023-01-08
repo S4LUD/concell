@@ -54,7 +54,6 @@ router.post(
 
     const data = new userModel({
       school_identification_number: req.body.school_identification_number,
-      email: req.body.email,
       name: req.body.name,
       position: req.body.position,
       password: hashedPassword,
