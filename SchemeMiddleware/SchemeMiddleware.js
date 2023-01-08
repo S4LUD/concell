@@ -27,7 +27,10 @@ const userGetSchemeMiddleware = (req, res, next) => {
 const userPatchSchemeMiddleware = (req, res, next) => {
   const user_Scheme = Joi.object({
     _id: Joi.string().required(),
-    image: Joi.string().required(),
+    image: Joi.string(),
+    school_identification_number: Joi.number(),
+    email: Joi.string().email(),
+    name: Joi.string(),
   });
   const { error } = user_Scheme.validate(req.body);
   if (error)

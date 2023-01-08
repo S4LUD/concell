@@ -113,32 +113,101 @@ router.patch(
   }
 );
 
-router.post("/user/sin", accountVerificationMiddleware, (req, res) => {
-  userModel.findByIdAndUpdate(
-    {
-      _id: req.body._id,
-    },
-    {
-      $set: {
-        school_identification_number: req.body.school_identification_number,
+router.post(
+  "/user/sin",
+  userPatchSchemeMiddleware,
+  accountVerificationMiddleware,
+  async (req, res) => {
+    userModel.findByIdAndUpdate(
+      {
+        _id: req.body._id,
       },
-    },
-    {
-      returnDocument: "after",
-    },
-    (err, data) => {
-      if (err)
-        return res.status(400).send({
-          status: false,
-          message: "failed to update school identification number",
+      {
+        $set: {
+          school_identification_number: req.body.school_identification_number,
+        },
+      },
+      {
+        returnDocument: "after",
+      },
+      (err, data) => {
+        if (err)
+          return res.status(400).send({
+            status: false,
+            message: "failed to update school identification number",
+          });
+        return res.status(200).send({
+          status: true,
+          message: "school identification number successfully updated",
         });
-      return res.status(200).send({
-        status: true,
-        message: "school identification number successfully updated",
-      });
-    }
-  );
-});
+      }
+    );
+  }
+);
+
+router.post(
+  "/user/email",
+  userPatchSchemeMiddleware,
+  accountVerificationMiddleware,
+  async (req, res) => {
+    userModel.findByIdAndUpdate(
+      {
+        _id: req.body._id,
+      },
+      {
+        $set: {
+          email: req.body.email,
+        },
+      },
+      {
+        returnDocument: "after",
+      },
+      (err, data) => {
+        if (err)
+          return res.status(400).send({
+            status: false,
+            message: "failed to update email",
+          });
+        return res.status(200).send({
+          status: true,
+          message: "email successfully updated",
+        });
+      }
+    );
+  }
+);
+
+router.post(
+  "/user/name",
+  userPatchSchemeMiddleware,
+  accountVerificationMiddleware,
+  async (req, res) => {
+    userModel.findByIdAndUpdate(
+      {
+        _id: req.body._id,
+      },
+      {
+        $set: {
+          name: req.body.name,
+        },
+      },
+      {
+        returnDocument: "after",
+      },
+      (err, data) => {
+        if (err)
+          return res.status(400).send({
+            status: false,
+            message: "failed to update name",
+          });
+        return res.status(200).send({
+          status: true,
+          message: "name successfully updated",
+        });
+      }
+    );
+  }
+);
 
 router
   .route("/schedule")
