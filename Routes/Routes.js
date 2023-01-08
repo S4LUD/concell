@@ -113,6 +113,33 @@ router.patch(
   }
 );
 
+router.post("/user/sin", accountVerificationMiddleware, (req, res) => {
+  userModel.findByIdAndUpdate(
+    {
+      _id: req.body._id,
+    },
+    {
+      $set: {
+        school_identification_number: req.body.school_identification_number,
+      },
+    },
+    {
+      returnDocument: "after",
+    },
+    (err, data) => {
+      if (err)
+        return res.status(400).send({
+          status: false,
+          message: "failed to update school identification number",
+        });
+      return res.status(200).send({
+        status: true,
+        message: "school identification number successfully updated",
+      });
+    }
+  );
+});
+
 router
   .route("/schedule")
   .post(
