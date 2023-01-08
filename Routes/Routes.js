@@ -216,13 +216,15 @@ router.patch(
   accountVerificationMiddleware,
   accountPasswordMiddleware,
   async (req, res) => {
+    const salt = bcrypt.genSaltSync(10);
+    const hashedPassword = bcrypt.hashSync(req.body.new_password, salt);
     userModel.findByIdAndUpdate(
       {
         _id: req.body._id,
       },
       {
         $set: {
-          password: req.body.new_password,
+          password: hashedPassword,
         },
       },
       {
