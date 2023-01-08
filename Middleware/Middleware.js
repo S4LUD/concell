@@ -95,6 +95,26 @@ const accountVerificationMiddleware = async (req, res, next) => {
   }
 };
 
+const accountPasswordMiddleware = async (req, res, next) => {
+  userModel.findOne({ _id: req.body._id }, async (err, data) => {
+    if (err) return res.status(400).send(err);
+    if (!data)
+      return res.status(404).send({
+        status: false,
+        message: "You enter the incorrect previous password",
+      });
+
+    const validate = bcrypt.compareSync(req.body.password, data.password);
+    if (!validate)
+      return res.status(400).send({
+        status: false,
+        message: "You enter the incorrect previous password.",
+      });
+
+    next();
+  });
+};
+
 module.exports = {
   nameRegisterMiddleware,
   emailRegisterMiddleware,
@@ -102,4 +122,5 @@ module.exports = {
   accountTokenMiddleware,
   accountVerificationMiddleware,
   roomPostMiddleware,
+  accountPasswordMiddleware,
 };

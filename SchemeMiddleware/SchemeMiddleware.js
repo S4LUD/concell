@@ -31,6 +31,7 @@ const userPatchSchemeMiddleware = (req, res, next) => {
     school_identification_number: Joi.number(),
     email: Joi.string().email(),
     name: Joi.string(),
+    password: Joi.string(),
   });
   const { error } = user_Scheme.validate(req.body);
   if (error)

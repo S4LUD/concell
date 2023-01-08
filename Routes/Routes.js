@@ -21,6 +21,7 @@ const {
   accountTokenMiddleware,
   accountVerificationMiddleware,
   roomPostMiddleware,
+  accountPasswordMiddleware,
 } = require("../Middleware/Middleware");
 
 router.post("/user", accountVerificationMiddleware, (req, res) => {
@@ -203,6 +204,39 @@ router.patch(
         return res.status(200).send({
           status: true,
           message: "name successfully updated",
+        });
+      }
+    );
+  }
+);
+
+router.patch(
+  "/user/password",
+  userPatchSchemeMiddleware,
+  accountVerificationMiddleware,
+  accountPasswordMiddleware,
+  async (req, res) => {
+    userModel.findByIdAndUpdate(
+      {
+        _id: req.body._id,
+      },
+      {
+        $set: {
+          password: req.body.password,
+        },
+      },
+      {
+        returnDocument: "after",
+      },
+      (err, data) => {
+        if (err)
+          return res.status(400).send({
+            status: false,
+            message: "failed to update name",
+          });
+        return res.status(200).send({
+          status: true,
+          message: "password successfully updated",
         });
       }
     );
