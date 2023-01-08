@@ -105,7 +105,7 @@ router.patch(
         if (err)
           return res
             .status(400)
-            .send({ status: false, message: "failed to update image" });
+            .send({ status: false, message: "failed to update photo" });
         return res
           .status(200)
           .send({ status: true, message: "photo successfully updated" });
@@ -232,7 +232,7 @@ router.patch(
         if (err)
           return res.status(400).send({
             status: false,
-            message: "failed to update name",
+            message: "failed to update password",
           });
         return res.status(200).send({
           status: true,
