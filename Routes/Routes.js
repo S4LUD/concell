@@ -113,7 +113,7 @@ router.patch(
   }
 );
 
-router.post(
+router.patch(
   "/user/sin",
   userPatchSchemeMiddleware,
   accountVerificationMiddleware,
@@ -145,7 +145,7 @@ router.post(
   }
 );
 
-router.post(
+router.patch(
   "/user/email",
   userPatchSchemeMiddleware,
   accountVerificationMiddleware,
@@ -177,7 +177,7 @@ router.post(
   }
 );
 
-router.post(
+router.patch(
   "/user/name",
   userPatchSchemeMiddleware,
   accountVerificationMiddleware,
