@@ -1,6 +1,5 @@
 const router = require("express").Router();
 const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
 const userModel = require("../Model/userModel");
 const roomModel = require("../Model/roomModel");
 const scheduleModel = require("../Model/scheduleModel");
@@ -328,9 +327,44 @@ router
     }
   );
 
-router
-  .route("/room")
-  .post(accountVerificationMiddleware, roomPostSchemeMiddleware, (req, res) => {
+router.delete(
+  "/room/delete",
+  accountVerificationMiddleware,
+  roomDeleteSchemeMiddleware,
+  async (req, res) => {
+    roomModel.findByIdAndDelete(
+      {
+        _id: req.body._id,
+      },
+      (err, data) => {
+        if (err) return res.status(400).send({ message: "invalid passed _id" });
+        data.schedules.forEach((element) => {
+          scheduleModel.findByIdAndDelete(
+            {
+              _id: element.toString(),
+            },
+            {
+              returnDocument: "after",
+            },
+            (err, data) => {
+              if (err)
+                return res
+                  .status(200)
+                  .send("Please notify the developer if something went wrong.");
+            }
+          );
+        });
+        return res.status(200).send(data);
+      }
+    );
+  }
+);
+
+router.post(
+  "/room/create",
+  accountVerificationMiddleware,
+  roomPostSchemeMiddleware,
+  (req, res) => {
     const { _id } = req.user;
 
     function roomCode(length) {
@@ -359,50 +393,15 @@ router
       if (err) return res.status(400).send(err);
       return res.status(200).send({ message: true });
     });
-  })
-  .get(accountVerificationMiddleware, (req, res) => {
-    roomModel.find((err, data) => {
-      if (err)
-        return res
-          .status(400)
-          .send({ status: false, message: "failed to retrieve data" });
-      res.status(200).send(data);
-    });
-  })
-  .delete(
-    accountVerificationMiddleware,
-    roomDeleteSchemeMiddleware,
-    async (req, res) => {
-      roomModel.findByIdAndDelete(
-        {
-          _id: req.body._id,
-        },
-        (err, data) => {
-          if (err)
-            return res.status(400).send({ message: "invalid passed _id" });
-          data.schedules.forEach((element) => {
-            scheduleModel.findByIdAndDelete(
-              {
-                _id: element.toString(),
-              },
-              {
-                returnDocument: "after",
-              },
-              (err, data) => {
-                if (err)
-                  return res
-                    .status(200)
-                    .send(
-                      "Please notify the developer if something went wrong."
-                    );
-              }
-            );
-          });
-          return res.status(200).send(data);
-        }
-      );
-    }
-  );
+  }
+);
+
+router.post("/room", accountVerificationMiddleware, (req, res) => {
+  roomModel.findOne({ creator_id: req.body._id }, (err, data) => {
+    if (err) return res.status(400).send(err);
+    res.status(200).send(data);
+  });
+});
 
 router
   .route("/member")
