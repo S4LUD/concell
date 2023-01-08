@@ -202,12 +202,27 @@ router
   .route("/room")
   .post(accountVerificationMiddleware, roomPostSchemeMiddleware, (req, res) => {
     const { _id } = req.user;
+
+    function roomCode(length) {
+      var result = "";
+      var characters =
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+      var charactersLength = characters.length;
+      for (var i = 0; i < length; i++) {
+        result += characters.charAt(
+          Math.floor(Math.random() * charactersLength)
+        );
+      }
+      return result;
+    }
+
     const data = new roomModel({
       room_name: req.body.room_name,
       room_details: req.body.room_details,
       creator_id: _id,
       members: [],
       schedules: [],
+      code: roomCode(6),
     });
 
     data.save((err, data) => {

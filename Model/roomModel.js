@@ -22,6 +22,10 @@ const roomModel = new mongoose.Schema({
       required: true,
     },
   ],
+  code: {
+    type: String,
+    required: true,
+  },
 });
 
 roomModel.set("timestamps", true);
