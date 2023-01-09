@@ -404,6 +404,21 @@ router.post("/room", accountVerificationMiddleware, (req, res) => {
     .populate("members");
 });
 
+router.post("/room/all", accountVerificationMiddleware, (req, res) => {
+  roomModel
+    .find({ creator_id: req.body._id }, (err, data) => {
+      if (err) return res.status(400).send(err);
+      let tempSchedules = [];
+      data.forEach((room) => {
+        room.schedules.forEach((schedule) => {
+          tempSchedules.push(schedule);
+        });
+      });
+      return res.status(200).send(tempSchedules);
+    })
+    .populate("schedules");
+});
+
 router
   .route("/member")
   .post(accountVerificationMiddleware, roomPostMiddleware, (req, res) => {
