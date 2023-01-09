@@ -404,19 +404,49 @@ router.post("/room", accountVerificationMiddleware, (req, res) => {
     .populate("members");
 });
 
-router.post("/room/all", accountVerificationMiddleware, (req, res) => {
+router.post(
+  "/room/all/schedules",
+  accountVerificationMiddleware,
+  (req, res) => {
+    roomModel
+      .find({ creator_id: req.body._id }, (err, data) => {
+        if (err) return res.status(400).send(err);
+        let tempSchedules = [];
+        data.forEach((room) => {
+          room.schedules.forEach((schedule) => {
+            tempSchedules.push(schedule);
+          });
+        });
+        return res.status(200).send(tempSchedules);
+      })
+      .populate("schedules");
+  }
+);
+
+router.post("/room/all/members", accountVerificationMiddleware, (req, res) => {
   roomModel
     .find({ creator_id: req.body._id }, (err, data) => {
       if (err) return res.status(400).send(err);
-      let tempSchedules = [];
+      let tempMembers = [];
       data.forEach((room) => {
-        room.schedules.forEach((schedule) => {
-          tempSchedules.push(schedule);
+        room.members.forEach((member) => {
+          tempMembers.push(member);
         });
       });
-      return res.status(200).send(tempSchedules);
+      return res.status(200).send(tempMembers);
     })
-    .populate("schedules");
+    .populate({
+      path: "members",
+      select: [
+        "_id",
+        "school_identification_number",
+        "position",
+        "name",
+        "createdAt",
+        "updatedAt",
+        "image",
+      ],
+    });
 });
 
 router
