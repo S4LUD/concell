@@ -397,7 +397,7 @@ router.post(
 );
 
 router.post("/room", accountVerificationMiddleware, (req, res) => {
-  roomModel.findOne({ creator_id: req.body._id }, (err, data) => {
+  roomModel.find({ creator_id: req.body._id }, (err, data) => {
     if (err) return res.status(400).send(err);
     res.status(200).send(data);
   });
