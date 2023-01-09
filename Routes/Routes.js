@@ -425,16 +425,19 @@ router.post(
 
 router.post("/room/all/members", accountVerificationMiddleware, (req, res) => {
   roomModel
-    .find({ creator_id: req.body._id }, (err, data) => {
-      if (err) return res.status(400).send(err);
-      let tempMembers = [];
-      data.forEach((room) => {
-        room.members.forEach((member) => {
-          tempMembers.push(member);
+    .find(
+      { _id: req.body._id, creator_id: req.body.creator_id },
+      (err, data) => {
+        if (err) return res.status(400).send(err);
+        let tempMembers = [];
+        data.forEach((room) => {
+          room.members.forEach((member) => {
+            tempMembers.push(member);
+          });
         });
-      });
-      return res.status(200).send(tempMembers);
-    })
+        return res.status(200).send(tempMembers);
+      }
+    )
     .populate({
       path: "members",
       select: [
