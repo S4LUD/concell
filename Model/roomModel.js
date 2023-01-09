@@ -14,12 +14,14 @@ const roomModel = new mongoose.Schema({
     {
       type: mongoose.Schema.Types.ObjectId,
       required: true,
+      ref: "user",
     },
   ],
   schedules: [
     {
       type: mongoose.Schema.Types.ObjectId,
       required: true,
+      ref: "schedule",
     },
   ],
   code: {

@@ -258,32 +258,32 @@ router
 
       data.save((err, data) => {
         if (err) return res.status(400).send(err);
-        roomModel.findByIdAndUpdate(
-          {
-            _id: req.body._id,
-          },
-          { $push: { schedules: data._id } },
-          {
-            returnDocument: "after",
-          },
-          async (err, data) => {
-            if (err) return res.status(400).send(err);
-            if (err) {
-              try {
-                const schduleData = await scheduleModel.deleteOne({
-                  _id: data._id,
-                });
-                if (schduleData)
-                  return res
-                    .status(200)
-                    .send({ message: "adding schedule failed" });
-              } catch (err) {
-                res.status(400).send(err);
+        roomModel
+          .findByIdAndUpdate(
+            { creator_id: req.body.creator_id, _id: req.body._id },
+            { $push: { schedules: data._id } },
+            {
+              returnDocument: "after",
+            },
+            async (err, data) => {
+              if (err) return res.status(400).send(err);
+              if (err) {
+                try {
+                  const schduleData = await scheduleModel.deleteOne({
+                    _id: data._id,
+                  });
+                  if (schduleData)
+                    return res
+                      .status(200)
+                      .send({ message: "adding schedule failed" });
+                } catch (err) {
+                  res.status(400).send(err);
+                }
               }
+              return res.status(200).send(data);
             }
-            return res.status(200).send(data);
-          }
-        );
+          )
+          .populate("schedules");
       });
     }
   )
@@ -368,11 +368,11 @@ router.post(
     const { _id } = req.user;
 
     function roomCode(length) {
-      var result = "";
-      var characters =
+      let result = "";
+      let characters =
         "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-      var charactersLength = characters.length;
-      for (var i = 0; i < length; i++) {
+      let charactersLength = characters.length;
+      for (let i = 0; i < length; i++) {
         result += characters.charAt(
           Math.floor(Math.random() * charactersLength)
         );

@@ -78,6 +78,7 @@ const roomDeleteSchemeMiddleware = (req, res, next) => {
 const schedulePostSchemeMiddleware = (req, res, next) => {
   const schedule_Scheme = Joi.object({
     _id: Joi.string().required(),
+    creator_id: Joi.string().required(),
     title: Joi.string().required(),
     description: Joi.string().required(),
     scheduledAt: Joi.date().required(),
