@@ -258,32 +258,30 @@ router
 
       data.save((err, data) => {
         if (err) return res.status(400).send(err);
-        roomModel
-          .findByIdAndUpdate(
-            { creator_id: req.body.creator_id, _id: req.body._id },
-            { $push: { schedules: data._id } },
-            {
-              returnDocument: "after",
-            },
-            async (err, data) => {
-              if (err) return res.status(400).send(err);
-              if (err) {
-                try {
-                  const schduleData = await scheduleModel.deleteOne({
-                    _id: data._id,
-                  });
-                  if (schduleData)
-                    return res
-                      .status(200)
-                      .send({ message: "adding schedule failed" });
-                } catch (err) {
-                  res.status(400).send(err);
-                }
+        roomModel.findByIdAndUpdate(
+          { creator_id: req.body.creator_id, _id: req.body._id },
+          { $push: { schedules: data._id } },
+          {
+            returnDocument: "after",
+          },
+          async (err, data) => {
+            if (err) return res.status(400).send(err);
+            if (err) {
+              try {
+                const schduleData = await scheduleModel.deleteOne({
+                  _id: data._id,
+                });
+                if (schduleData)
+                  return res
+                    .status(200)
+                    .send({ message: "adding schedule failed" });
+              } catch (err) {
+                res.status(400).send(err);
               }
-              return res.status(200).send(data);
             }
-          )
-          .populate("schedules");
+            return res.status(200).send(data);
+          }
+        );
       });
     }
   )
@@ -397,10 +395,13 @@ router.post(
 );
 
 router.post("/room", accountVerificationMiddleware, (req, res) => {
-  roomModel.find({ creator_id: req.body._id }, (err, data) => {
-    if (err) return res.status(400).send(err);
-    return res.status(200).send(data);
-  });
+  roomModel
+    .find({ creator_id: req.body._id }, (err, data) => {
+      if (err) return res.status(400).send(err);
+      return res.status(200).send(data);
+    })
+    .populate("schedules")
+    .populate("members");
 });
 
 router
