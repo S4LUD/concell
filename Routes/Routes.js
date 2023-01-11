@@ -474,8 +474,7 @@ router.post(
                 "updatedAt",
                 "image",
               ],
-            })
-            .sort({ createdAt: "descending" });
+            });
         });
 
         setTimeout(() => {
@@ -486,38 +485,17 @@ router.post(
   }
 );
 
-router.post("/room/all/members", accountVerificationMiddleware, (req, res) => {
-  roomModel
-    .find(
-      { _id: req.body._id, creator_id: req.body.creator_id },
-      (err, data) => {
-        if (err) return res.status(400).send(err);
-        let tempMembers = [];
-        data.forEach((room) => {
-          room.members.forEach((member) => {
-            tempMembers.push(member);
-          });
-        });
-        return res.status(200).send(tempMembers);
-      }
-    )
-    .populate({
-      path: "members",
-      select: [
-        "_id",
-        "school_identification_number",
-        "position",
-        "name",
-        "createdAt",
-        "updatedAt",
-        "image",
-      ],
-    });
+router.post("/student/room", accountVerificationMiddleware, (req, res) => {
+  roomModel.find({ members: req.body._id }, (err, data) => {
+    res.send(data);
+  });
 });
 
-router
-  .route("/member")
-  .post(accountVerificationMiddleware, roomPostMiddleware, (req, res) => {
+router.post(
+  "/member/join",
+  accountVerificationMiddleware,
+  roomPostMiddleware,
+  (req, res) => {
     roomModel.findByIdAndUpdate(
       {
         _id: req.body._id,
@@ -531,26 +509,29 @@ router
         return res.status(200).send(data);
       }
     );
-  })
-  .patch(
-    accountVerificationMiddleware,
-    roomPatchSchemeMiddleware,
-    (req, res) => {
-      roomModel.findByIdAndUpdate(
-        {
-          _id: req.body._id,
-        },
-        { $pull: { members: req.body.user_id } },
-        {
-          returnDocument: "after",
-        },
-        (err, data) => {
-          if (err)
-            return res.status(400).send({ message: "failed to remove user" });
-          return res.status(200).send(data);
-        }
-      );
-    }
-  );
+  }
+);
+
+router.patch(
+  "/member/leave",
+  accountVerificationMiddleware,
+  roomPatchSchemeMiddleware,
+  (req, res) => {
+    roomModel.findByIdAndUpdate(
+      {
+        _id: req.body._id,
+      },
+      { $pull: { members: req.body.user_id } },
+      {
+        returnDocument: "after",
+      },
+      (err, data) => {
+        if (err)
+          return res.status(400).send({ message: "failed to remove user" });
+        return res.status(200).send(data);
+      }
+    );
+  }
+);
 
 module.exports = router;
