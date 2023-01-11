@@ -268,7 +268,6 @@ router
             returnDocument: "after",
           },
           async (err, data) => {
-            if (err) return res.status(400).send(err);
             if (err) {
               try {
                 const schduleData = await scheduleModel.deleteOne({
@@ -277,12 +276,17 @@ router
                 if (schduleData)
                   return res
                     .status(200)
-                    .send({ message: "adding schedule failed" });
+                    .send({
+                      status: false,
+                      message: "failure to add schedule",
+                    });
               } catch (err) {
                 res.status(400).send(err);
               }
             }
-            return res.status(200).send(data);
+            return res
+              .status(200)
+              .send({ status: true, message: "made a schedule successfully" });
           }
         );
       });
@@ -404,7 +408,18 @@ router.post("/room", accountVerificationMiddleware, (req, res) => {
       return res.status(200).send(data);
     })
     .populate("schedules")
-    .populate("members");
+    .populate({
+      path: "members",
+      select: [
+        "_id",
+        "school_identification_number",
+        "position",
+        "name",
+        "createdAt",
+        "updatedAt",
+        "image",
+      ],
+    });
 });
 
 router.post(
