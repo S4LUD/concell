@@ -266,7 +266,7 @@ router
           {
             $push: {
               schedules: {
-                $each: data._id,
+                $each: [data._id],
                 $position: 0,
               },
             },
