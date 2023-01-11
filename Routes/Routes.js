@@ -546,20 +546,20 @@ router.post("/student/room", accountVerificationMiddleware, (req, res) => {
 });
 
 router.post(
-  "/member/join",
+  "/join/room",
   accountVerificationMiddleware,
   roomPostMiddleware,
   (req, res) => {
-    roomModel.findByIdAndUpdate(
+    roomModel.findOneAndUpdate(
       {
-        _id: req.body._id,
+        code: req.body.code,
       },
-      { $push: { members: req.body.user_id } },
+      { $push: { members: req.body._id } },
       {
         returnDocument: "after",
       },
       (err, data) => {
-        if (err) return res.status(400).send({ message: "failed to add user" });
+        if (err) return res.status(400).send(err);
         return res.status(200).send(data);
       }
     );

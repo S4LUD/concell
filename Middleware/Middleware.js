@@ -36,8 +36,8 @@ const sinRegisterMiddleware = (req, res, next) => {
 const roomPostMiddleware = (req, res, next) => {
   roomModel.findOne(
     {
-      _id: req.body._id,
-      members: req.body.user_id,
+      code: req.body.code,
+      members: req.body._id,
     },
     async (err, data) => {
       if (err) return res.status(400).send(err);
