@@ -428,26 +428,38 @@ router.post(
       .find({ creator_id: req.body._id }, (err, data) => {
         if (err) return res.status(400).send(err);
         let tempSchedules = [];
+        let tempMembers = [];
         data.forEach((room) => {
           room.schedules.forEach((schedule) => {
             tempSchedules.push(schedule);
           });
         });
-        return res.status(200).send(tempSchedules);
+
+        tempSchedules.forEach((members) => {
+          scheduleModel
+            .find({ _id: members._id.toString() }, (err, data) => {
+              if (err) return res.status(400).send(err);
+              tempMembers.push(data[0]);
+            })
+            .populate({
+              path: "members",
+              select: [
+                "_id",
+                "school_identification_number",
+                "position",
+                "name",
+                "createdAt",
+                "updatedAt",
+                "image",
+              ],
+            });
+        });
+
+        setTimeout(() => {
+          return res.status(200).send(tempMembers);
+        }, 1500);
       })
-      .populate("schedules")
-      .populate({
-        path: "members",
-        select: [
-          "_id",
-          "school_identification_number",
-          "position",
-          "name",
-          "createdAt",
-          "updatedAt",
-          "image",
-        ],
-      });
+      .populate("schedules");
   }
 );
 
