@@ -491,7 +491,8 @@ router.post(
   (req, res) => {
     scheduleModel
       .find({ members: req.body._id }, (err, data) => {
-        res.send(data);
+        if (err) return res.status(400).send(err);
+        res.status(200).send(data);
       })
       .sort({ createdAt: "desc" });
   }
