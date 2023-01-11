@@ -439,7 +439,7 @@ router.post("/room", accountVerificationMiddleware, (req, res) => {
         "image",
       ],
     })
-    .sort({ members: 1 });
+    .sort({ createdAt: 1 });
 });
 
 router.post(
@@ -486,9 +486,38 @@ router.post(
 );
 
 router.post("/student/room", accountVerificationMiddleware, (req, res) => {
-  roomModel.find({ members: req.body._id }, (err, data) => {
-    res.send(data);
-  });
+  roomModel
+    .find({ members: req.body._id }, (err, data) => {
+      res.send(data);
+    })
+    .populate({
+      path: "schedules",
+      populate: {
+        path: "members",
+        select: [
+          "_id",
+          "school_identification_number",
+          "position",
+          "name",
+          "createdAt",
+          "updatedAt",
+          "image",
+        ],
+      },
+    })
+    .populate({
+      path: "members",
+      select: [
+        "_id",
+        "school_identification_number",
+        "position",
+        "name",
+        "createdAt",
+        "updatedAt",
+        "image",
+      ],
+    })
+    .sort({ createdAt: 1 });
 });
 
 router.post(
