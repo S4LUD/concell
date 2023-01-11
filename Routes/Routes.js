@@ -485,6 +485,18 @@ router.post(
   }
 );
 
+router.post(
+  "/room/student/schedules",
+  accountVerificationMiddleware,
+  (req, res) => {
+    scheduleModel
+      .find({ members: req.body._id }, (err, data) => {
+        res.send(data);
+      })
+      .sort({ createdAt: "desc" });
+  }
+);
+
 router.post("/student/room", accountVerificationMiddleware, (req, res) => {
   roomModel
     .find({ members: req.body._id }, (err, data) => {
