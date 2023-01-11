@@ -263,7 +263,14 @@ router
         if (err) return res.status(400).send(err);
         roomModel.findByIdAndUpdate(
           { creator_id: req.body.creator_id, _id: req.body._id },
-          { $push: { schedules: data._id } },
+          {
+            $push: {
+              schedules: {
+                $each: data._id,
+                $position: 0,
+              },
+            },
+          },
           {
             returnDocument: "after",
           },
@@ -431,7 +438,8 @@ router.post("/room", accountVerificationMiddleware, (req, res) => {
         "updatedAt",
         "image",
       ],
-    });
+    })
+    .sort({ members: 1 });
 });
 
 router.post(
