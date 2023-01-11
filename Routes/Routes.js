@@ -274,12 +274,10 @@ router
                   _id: data._id,
                 });
                 if (schduleData)
-                  return res
-                    .status(200)
-                    .send({
-                      status: false,
-                      message: "failure to add schedule",
-                    });
+                  return res.status(200).send({
+                    status: false,
+                    message: "failure to add schedule",
+                  });
               } catch (err) {
                 res.status(400).send(err);
               }
@@ -437,7 +435,19 @@ router.post(
         });
         return res.status(200).send(tempSchedules);
       })
-      .populate("schedules");
+      .populate("schedules")
+      .populate({
+        path: "members",
+        select: [
+          "_id",
+          "school_identification_number",
+          "position",
+          "name",
+          "createdAt",
+          "updatedAt",
+          "image",
+        ],
+      });
   }
 );
 
