@@ -494,7 +494,19 @@ router.post(
         if (err) return res.status(400).send(err);
         res.status(200).send(data);
       })
-      .sort({ createdAt: "desc" });
+      .sort({ createdAt: "desc" })
+      .populate({
+        path: "members",
+        select: [
+          "_id",
+          "school_identification_number",
+          "position",
+          "name",
+          "createdAt",
+          "updatedAt",
+          "image",
+        ],
+      });
   }
 );
 
