@@ -405,7 +405,21 @@ router.post("/room", accountVerificationMiddleware, (req, res) => {
       if (err) return res.status(400).send(err);
       return res.status(200).send(data);
     })
-    .populate("schedules")
+    .populate({
+      path: "schedules",
+      populate: {
+        path: "members",
+        select: [
+          "_id",
+          "school_identification_number",
+          "position",
+          "name",
+          "createdAt",
+          "updatedAt",
+          "image",
+        ],
+      },
+    })
     .populate({
       path: "members",
       select: [
@@ -452,12 +466,13 @@ router.post(
                 "updatedAt",
                 "image",
               ],
-            });
+            })
+            .sort({ createdAt: "descending" });
         });
 
         setTimeout(() => {
           return res.status(200).send(tempMembers);
-        }, 1500);
+        }, 2000);
       })
       .populate("schedules");
   }
