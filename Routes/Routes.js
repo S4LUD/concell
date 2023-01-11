@@ -253,7 +253,10 @@ router
       const data = new scheduleModel({
         title: req.body.title,
         description: req.body.description,
-        scheduledAt: req.body.scheduledAt,
+        From: req.body.From,
+        To: req.body.To,
+        Date: req.body.Date,
+        members: req.body.members,
       });
 
       data.save((err, data) => {

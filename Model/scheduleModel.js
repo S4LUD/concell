@@ -9,7 +9,16 @@ const scheduleModel = new mongoose.Schema({
     type: String,
     required: true,
   },
-  scheduledAt: { type: Date, required: true },
+  members: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      ref: "user",
+    },
+  ],
+  From: { type: Date, required: true },
+  To: { type: Date, required: true },
+  Date: { type: Date, required: true },
 });
 
 scheduleModel.set("timestamps", true);

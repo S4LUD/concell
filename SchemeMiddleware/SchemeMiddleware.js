@@ -81,7 +81,10 @@ const schedulePostSchemeMiddleware = (req, res, next) => {
     creator_id: Joi.string().required(),
     title: Joi.string().required(),
     description: Joi.string().required(),
-    scheduledAt: Joi.date().required(),
+    From: Joi.string().required(),
+    To: Joi.string().required(),
+    Date: Joi.string().required(),
+    members: Joi.array().items(Joi.string()).required(),
   });
   const { error } = schedule_Scheme.validate(req.body);
   if (error)
