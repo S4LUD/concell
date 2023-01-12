@@ -607,10 +607,12 @@ router.post("/notification", accountVerificationMiddleware, (req, res) => {
 });
 
 router.post("/notification/all", accountVerificationMiddleware, (req, res) => {
-  notificationModel.find({ creator_id: req.body._id }, (err, data) => {
-    if (err) return res.status(400).send(err);
-    res.status(200).send(data);
-  });
+  notificationModel
+    .find({ creator_id: req.body._id }, (err, data) => {
+      if (err) return res.status(400).send(err);
+      res.status(200).send(data);
+    })
+    .sort({ createdAt: "desc" });
 });
 
 module.exports = router;
