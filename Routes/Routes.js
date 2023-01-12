@@ -43,6 +43,22 @@ router.post("/user", accountVerificationMiddleware, (req, res) => {
   });
 });
 
+router.post("/user/position", accountVerificationMiddleware, (req, res) => {
+  userModel
+    .find({ position: req.body.position }, (err, data) => {
+      if (err) return res.status(400).send({ status: false, message: err });
+      res.status(200).send(data);
+    })
+    .select({
+      _id: 1,
+      school_identification_number: 1,
+      email: 1,
+      name: 1,
+      position: 1,
+      image: 1,
+    });
+});
+
 router.post(
   "/user/register",
   userPostSchemeMiddleware,
