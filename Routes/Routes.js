@@ -565,7 +565,7 @@ router.post(
         if (err) return res.status(400).send(err);
         if (data === null)
           return res.send({ status: false, message: "Invalid code" });
-        return res.status(200).send({ status: true });
+        return res.status(200).send({ status: true, data });
       }
     );
   }
