@@ -44,7 +44,7 @@ const roomPostMiddleware = (req, res, next) => {
       if (data)
         return res
           .status(200)
-          .send({ message: "you've already entered the room" });
+          .send({ status: false, message: "you've already entered the room" });
       next();
     }
   );
