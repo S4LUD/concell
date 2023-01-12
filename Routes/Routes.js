@@ -22,6 +22,7 @@ const {
   roomPostMiddleware,
   accountPasswordMiddleware,
 } = require("../Middleware/Middleware");
+const notificationModel = require("../Model/notificationModel");
 
 router.post("/user", accountVerificationMiddleware, (req, res) => {
   userModel.findById(req.body._id, (err, data) => {
@@ -297,6 +298,7 @@ router
       });
     }
   )
+  // not used
   .patch(
     accountVerificationMiddleware,
     schedulePatchSchemeMiddleware,
@@ -337,6 +339,7 @@ router
     }
   );
 
+// not used
 router.delete(
   "/room/delete",
   accountVerificationMiddleware,
@@ -568,6 +571,7 @@ router.post(
   }
 );
 
+// not used
 router.patch(
   "/member/leave",
   accountVerificationMiddleware,
@@ -589,5 +593,17 @@ router.patch(
     );
   }
 );
+
+router.post("/notification", accountVerificationMiddleware, (req, res) => {
+  const data = new notificationModel({
+    details: req.body.details,
+    creator_id: req.body.creator_id,
+  });
+
+  data.save((err, data) => {
+    if (err) return res.status(400).send(err);
+    res.status(200).send(data);
+  });
+});
 
 module.exports = router;
