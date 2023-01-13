@@ -606,21 +606,7 @@ router.patch(
           return res
             .status(400)
             .send({ status: false, message: "failed to remove user" });
-
-        const dataNotif = new notificationModel({
-          message: "You were expelled from the room",
-          creator_id: req.body.user_id,
-        });
-
-        dataNotif.save((err, data) => {
-          if (err) return res.status(400).send(err);
-          return res
-            .status(200)
-            .send({
-              status: true,
-              message: `You've been kick from the ${req.body.room}`,
-            });
-        });
+        return res.status(400).send({ status: true });
       }
     );
   }
