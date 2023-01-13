@@ -74,7 +74,9 @@ router.post(
 
     data.save((err, data) => {
       if (err) return res.status(400).send(err);
-      return res.status(200).send({ message: true });
+      return res
+        .status(200)
+        .send({ status: true, message: "You've registered successfully" });
     });
   }
 );
