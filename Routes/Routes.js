@@ -309,7 +309,7 @@ router
 
             await req.body.members.forEach((item) => {
               const dataNotification = new notificationModel({
-                message: `You've been added to ${data.room_name} room schedule ""`,
+                message: `You've been added to ${data.room_name} room schedule.`,
                 creator_id: item,
               });
               dataNotification.save((err, data) => {
