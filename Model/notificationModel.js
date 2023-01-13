@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 const notificationModel = new mongoose.Schema({
-  details: {
+  message: {
     type: String,
     required: true,
   },

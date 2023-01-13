@@ -589,7 +589,7 @@ router.post(
 
 // not used
 router.patch(
-  "/member/leave",
+  "/member/kick",
   accountVerificationMiddleware,
   roomPatchSchemeMiddleware,
   (req, res) => {
@@ -603,8 +603,24 @@ router.patch(
       },
       (err, data) => {
         if (err)
-          return res.status(400).send({ message: "failed to remove user" });
-        return res.status(200).send(data);
+          return res
+            .status(400)
+            .send({ status: false, message: "failed to remove user" });
+
+        const dataNotif = new notificationModel({
+          message: "You were expelled from the room",
+          creator_id: req.body.user_id,
+        });
+
+        dataNotif.save((err, data) => {
+          if (err) return res.status(400).send(err);
+          return res
+            .status(200)
+            .send({
+              status: true,
+              message: `You've been kick from the ${req.body.room}`,
+            });
+        });
       }
     );
   }
@@ -612,13 +628,13 @@ router.patch(
 
 router.post("/notification", accountVerificationMiddleware, (req, res) => {
   const data = new notificationModel({
-    details: req.body.details,
+    message: req.body.message,
     creator_id: req.body.creator_id,
   });
 
   data.save((err, data) => {
     if (err) return res.status(400).send(err);
-    res.status(200).send(data);
+    res.status(200).send({ status: true, message: "Sent successfully." });
   });
 });
 
