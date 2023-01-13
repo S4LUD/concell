@@ -612,6 +612,30 @@ router.patch(
   }
 );
 
+router.patch(
+  "/leave/room",
+  accountVerificationMiddleware,
+  roomPatchSchemeMiddleware,
+  (req, res) => {
+    roomModel.findByIdAndUpdate(
+      {
+        _id: req.body._id,
+      },
+      { $pull: { members: req.body.user_id } },
+      {
+        returnDocument: "after",
+      },
+      (err, data) => {
+        if (err)
+          return res
+            .status(400)
+            .send({ status: false, message: "failed to leave from room" });
+        return res.status(400).send({ status: true });
+      }
+    );
+  }
+);
+
 router.post("/notification", accountVerificationMiddleware, (req, res) => {
   const data = new notificationModel({
     message: req.body.message,
