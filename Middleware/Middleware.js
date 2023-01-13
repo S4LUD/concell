@@ -25,9 +25,10 @@ const sinRegisterMiddleware = (req, res, next) => {
     async (err, data) => {
       if (err) return res.status(400).send(err);
       if (data)
-        return res
-          .status(302)
-          .send({ message: "school identification number already exist" });
+        return res.status(200).send({
+          status: false,
+          message: "school identification number already exist",
+        });
       next();
     }
   );

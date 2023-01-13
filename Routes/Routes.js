@@ -14,8 +14,6 @@ const {
   userPatchSchemeMiddleware,
 } = require("../SchemeMiddleware/SchemeMiddleware");
 const {
-  nameRegisterMiddleware,
-  emailRegisterMiddleware,
   sinRegisterMiddleware,
   accountTokenMiddleware,
   accountVerificationMiddleware,
@@ -62,7 +60,6 @@ router.post("/user/position", accountVerificationMiddleware, (req, res) => {
 router.post(
   "/user/register",
   userPostSchemeMiddleware,
-  nameRegisterMiddleware,
   sinRegisterMiddleware,
   (req, res) => {
     const salt = bcrypt.genSaltSync(10);
@@ -134,6 +131,7 @@ router.patch(
   "/user/sin",
   userPatchSchemeMiddleware,
   accountVerificationMiddleware,
+  sinRegisterMiddleware,
   async (req, res) => {
     userModel.findByIdAndUpdate(
       {
