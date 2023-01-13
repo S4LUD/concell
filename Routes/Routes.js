@@ -306,6 +306,17 @@ router
                 res.status(400).send(err);
               }
             }
+
+            await req.body.members.forEach((item) => {
+              const dataNotification = new notificationModel({
+                message: `You've been added to ${data.room_name} room schedule ""`,
+                creator_id: item,
+              });
+              dataNotification.save((err, data) => {
+                if (err) return res.status(400).send(err);
+              });
+            });
+
             return res
               .status(200)
               .send({ status: true, message: "made a schedule successfully" });
