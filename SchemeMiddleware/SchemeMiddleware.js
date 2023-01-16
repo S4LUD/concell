@@ -85,6 +85,7 @@ const schedulePostSchemeMiddleware = (req, res, next) => {
     To: Joi.string().required(),
     Date: Joi.string().required(),
     members: Joi.array().items(Joi.string()).required(),
+    images: Joi.array().items(Joi.object()).required(),
   });
   const { error } = schedule_Scheme.validate(req.body);
   if (error)

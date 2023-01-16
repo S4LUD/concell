@@ -274,6 +274,7 @@ router
         To: req.body.To,
         Date: req.body.Date,
         members: req.body.members,
+        images: req.body.image,
       });
 
       data.save((err, data) => {

@@ -19,6 +19,11 @@ const scheduleModel = new mongoose.Schema({
   From: { type: Date, required: true },
   To: { type: Date, required: true },
   Date: { type: Date, required: true },
+  images: [
+    {
+      type: String,
+    },
+  ],
 });
 
 scheduleModel.set("timestamps", true);
