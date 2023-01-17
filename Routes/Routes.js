@@ -679,6 +679,7 @@ router.patch("/add/comment", accountVerificationMiddleware, (req, res) => {
           _id: req.body.comment_id,
           comment: req.body.comment,
           image: req.body.image,
+          name: req.body.name,
         },
       },
     },
