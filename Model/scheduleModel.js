@@ -24,6 +24,11 @@ const scheduleModel = new mongoose.Schema({
       type: String,
     },
   ],
+  comments: [
+    {
+      type: Object,
+    },
+  ],
 });
 
 scheduleModel.set("timestamps", true);
