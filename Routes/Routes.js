@@ -275,6 +275,7 @@ router
         Date: req.body.Date,
         members: req.body.members,
         images: req.body.images,
+        comments: [],
       });
 
       data.save((err, data) => {
@@ -667,6 +668,31 @@ router.post("/notification/all", accountVerificationMiddleware, (req, res) => {
       res.status(200).send(data);
     })
     .sort({ createdAt: "desc" });
+});
+
+router.patch("/add/comment", accountVerificationMiddleware, (req, res) => {
+  scheduleModel.findByIdAndUpdate(
+    { _id: req.body._id },
+    {
+      $push: {
+        comments: {
+          _id: req.body.comment_id,
+          comment: req.body.comment,
+          image: req.body.image,
+        },
+      },
+    },
+    {
+      returnDocument: "after",
+    },
+    async (err, data) => {
+      if (err) return res.status(400).send(err);
+
+      return res
+        .status(200)
+        .send({ status: true, message: "successfully commented" });
+    }
+  );
 });
 
 module.exports = router;
